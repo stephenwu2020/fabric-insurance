@@ -1,0 +1,188 @@
+version: "2"
+networks:
+  net:
+services: 
+  # ca servers
+  tlsca.example.com:
+    extends:
+      file: docker-compose-base.yaml
+      service: ca-base
+    container_name: tlsca.example.com
+    environment:
+      - FABRIC_CA_SERVER_CSR_CN=tlsca
+    command: sh -c 'fabric-ca-server start -b tls-ca-admin:tls-ca-adminpw --port 7052 --loglevel ${CA_LOG_LEVEL}'
+    volumes:
+      - ./crypto/caservers/tlsca.example.com:/tmp/hyperledger/fabric-ca
+    ports:
+      - 7052:7052
+  org0ca.example.com:
+    extends:
+      file: docker-compose-base.yaml
+      service: ca-base
+    container_name: org0ca.example.com
+    environment:
+      - FABRIC_CA_SERVER_CSR_CN=org0ca
+    command: sh -c 'fabric-ca-server start -b org0-ca-admin:org0-ca-adminpw --port 7053  --loglevel ${CA_LOG_LEVEL}'
+    volumes:
+      - ./crypto/caservers/org0ca.example.com:/tmp/hyperledger/fabric-ca
+    ports:
+      - 7053:7053
+  org1ca.example.com:
+    extends:
+      file: docker-compose-base.yaml
+      service: ca-base
+    container_name: org1ca.example.com
+    environment:
+      - FABRIC_CA_SERVER_CSR_CN=org1ca
+    command: sh -c 'fabric-ca-server start -b org1-ca-admin:org1-ca-adminpw --port 7054 --loglevel ${CA_LOG_LEVEL}'
+    volumes:
+      - ./crypto/caservers/org1ca.example.com:/tmp/hyperledger/fabric-ca
+    ports:
+      - 7054:7054
+  org2ca.example.com:
+    extends:
+      file: docker-compose-base.yaml
+      service: ca-base
+    container_name: org2ca.example.com
+    environment:
+      - FABRIC_CA_SERVER_CSR_CN=org2ca
+    command: sh -c 'fabric-ca-server start -b org2-ca-admin:org2-ca-adminpw --port 7055 --loglevel ${CA_LOG_LEVEL}'
+    volumes:
+      - ./crypto/caservers/org2ca.example.com:/tmp/hyperledger/fabric-ca
+    ports:
+      - 7055:7055
+
+  # org0's orderer
+  orderer.org0.example.com:
+    extends:
+      file: docker-compose-base.yaml
+      service: orderer-base
+    container_name: orderer.org0.example.com
+    environment:
+      - ORDERER_HOST=orderer.org0.example.com
+      - ORDERER_GENERAL_GENESISFILE=/tmp/hyperledger/artifacts/genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=Org0MSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/tmp/hyperledger/org0/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/tmp/hyperledger/org0/orderer/tls-msp/signcerts/cert.pem
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/tmp/hyperledger/org0/orderer/tls-msp/keystore/key.pem
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/tmp/hyperledger/org0/orderer/tls-msp/tlscacerts/tls-0-0-0-0-7052.pem]
+    volumes:
+      - ./crypto/ordererOrganizations/org0.example.com/orderers/orderer.org0.example.com:/tmp/hyperledger/org0/orderer/
+      - ./artifacts:/tmp/hyperledger/artifacts
+    ports:
+      - 7050:7050
+
+  # org1's peers
+  peer1.org1.example.com:
+    extends:
+      file: docker-compose-base.yaml
+      service: peer-base
+    container_name: peer1.org1.example.com
+    environment:
+      - CORE_PEER_ID=peer1.org1.example.com
+      - CORE_PEER_ADDRESS=peer1.org1.example.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_MSPCONFIGPATH=/tmp/hyperledger/org1/peer1/msp
+      - CORE_PEER_TLS_CERT_FILE=/tmp/hyperledger/org1/peer1/tls-msp/signcerts/cert.pem
+      - CORE_PEER_TLS_KEY_FILE=/tmp/hyperledger/org1/peer1/tls-msp/keystore/key.pem
+      - CORE_PEER_TLS_ROOTCERT_FILE=/tmp/hyperledger/org1/peer1/tls-msp/tlscacerts/tls-0-0-0-0-7052.pem
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org1.example.com:7051
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/org1/peer1
+    volumes:
+      - ./crypto/peerOrganizations/org1.example.com/peers/peer1.org1.example.com:/tmp/hyperledger/org1/peer1
+    ports:
+      - 7051:7051
+
+  peer2.org1.example.com:
+    extends:
+      file: docker-compose-base.yaml
+      service: peer-base
+    container_name: peer2.org1.example.com
+    environment:
+      - CORE_PEER_ID=peer2.org1.example.com
+      - CORE_PEER_ADDRESS=peer2.org1.example.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_MSPCONFIGPATH=/tmp/hyperledger/org1/peer2/msp
+      - CORE_PEER_TLS_CERT_FILE=/tmp/hyperledger/org1/peer2/tls-msp/signcerts/cert.pem
+      - CORE_PEER_TLS_KEY_FILE=/tmp/hyperledger/org1/peer2/tls-msp/keystore/key.pem
+      - CORE_PEER_TLS_ROOTCERT_FILE=/tmp/hyperledger/org1/peer2/tls-msp/tlscacerts/tls-0-0-0-0-7052.pem
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.org1.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org1.example.com:7051
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/org1/peer2
+    volumes:
+      - ./crypto/peerOrganizations/org1.example.com/peers/peer2.org1.example.com:/tmp/hyperledger/org1/peer2
+
+  # org2's peers
+  peer1.org2.example.com:
+    extends:
+      file: docker-compose-base.yaml
+      service: peer-base
+    container_name: peer1.org2.example.com
+    environment:
+      - CORE_PEER_ID=peer1.org2.example.com
+      - CORE_PEER_ADDRESS=peer1.org2.example.com:7051
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_PEER_MSPCONFIGPATH=/tmp/hyperledger/org2/peer1/msp
+      - CORE_PEER_TLS_CERT_FILE=/tmp/hyperledger/org2/peer1/tls-msp/signcerts/cert.pem
+      - CORE_PEER_TLS_KEY_FILE=/tmp/hyperledger/org2/peer1/tls-msp/keystore/key.pem
+      - CORE_PEER_TLS_ROOTCERT_FILE=/tmp/hyperledger/org2/peer1/tls-msp/tlscacerts/tls-0-0-0-0-7052.pem
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org2.example.com:7051
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/org2/peer1
+    volumes:
+      - ./crypto/peerOrganizations/org2.example.com/peers/peer1.org2.example.com:/tmp/hyperledger/org2/peer1
+  peer2.org2.example.com:
+    extends:
+      file: docker-compose-base.yaml
+      service: peer-base
+    container_name: peer2.org2.example.com
+    environment:
+      - CORE_PEER_ID=peer2.org2.example.com
+      - CORE_PEER_ADDRESS=peer2.org2.example.com:7051
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_PEER_MSPCONFIGPATH=/tmp/hyperledger/org2/peer2/msp
+      - CORE_PEER_TLS_CERT_FILE=/tmp/hyperledger/org2/peer2/tls-msp/signcerts/cert.pem
+      - CORE_PEER_TLS_KEY_FILE=/tmp/hyperledger/org2/peer2/tls-msp/keystore/key.pem
+      - CORE_PEER_TLS_ROOTCERT_FILE=/tmp/hyperledger/org2/peer2/tls-msp/tlscacerts/tls-0-0-0-0-7052.pem
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.org2.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org2.example.com:7051
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/org2/peer2
+    volumes:
+      - ./crypto/peerOrganizations/org2.example.com/peers/peer2.org2.example.com:/tmp/hyperledger/org2/peer2
+
+  # cli
+  cli.org1.example.com:
+    extends:
+      file: docker-compose-base.yaml
+      service: cli-base
+    container_name: cli.org1.example.com
+    environment:
+      - CORE_PEER_ID=cli.org1.example.com
+      - CORE_PEER_ADDRESS=peer1.org1.example.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_TLS_ROOTCERT_FILE=/tmp/hyperledger/org1/peer1/tls-msp/tlscacerts/tls-0-0-0-0-7052.pem
+      - CORE_PEER_MSPCONFIGPATH=/tmp/hyperledger/org1/peer1/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/org1
+    volumes:
+      - ./crypto/peerOrganizations/org1.example.com/peers/peer1.org1.example.com:/tmp/hyperledger/org1/peer1
+      - ./crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com:/tmp/hyperledger/org1/admin
+      - ../chaincode:/opt/gopath/src/github.com/stephenwu2020/fabric-insurance/chaincode
+      - ./artifacts:/tmp/hyperledger/artifacts
+
+  cli.org2.example.com:
+    extends:
+      file: docker-compose-base.yaml
+      service: cli-base
+    container_name: cli.org2.example.com
+    environment:
+      - CORE_PEER_ID=cli.org2.example.com
+      - CORE_PEER_ADDRESS=peer1.org2.example.com:7051
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_PEER_TLS_ROOTCERT_FILE=/tmp/hyperledger/org2/peer1/tls-msp/tlscacerts/tls-0-0-0-0-7052.pem
+      - CORE_PEER_MSPCONFIGPATH=/tmp/hyperledger/org2/peer1/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/org2
+    volumes:
+      - ./crypto/peerOrganizations/org2.example.com/peers/peer1.org2.example.com:/tmp/hyperledger/org2/peer1
+      - ./crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com:/tmp/hyperledger/org2/admin
+      - ../chaincode:/opt/gopath/src/github.com/stephenwu2020/fabric-insurance/chaincode
+      - ./artifacts:/tmp/hyperledger/artifacts

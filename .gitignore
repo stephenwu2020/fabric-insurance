@@ -1,0 +1,5 @@
+fixtures/crypto
+fixtures/artifacts
+server/serverapp
+server/serverapp.log
+server/.vscode
