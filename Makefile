@@ -55,6 +55,7 @@ test:
 	#${POST} -d '{"shop_type": "B" }' ${HEAD}/getContractTypes | ${FORMAT}
 	#${POST} ${HEAD}/createContractType -d '{"uuid":"12345","shop_type":"C","formula_per_day":"30.00","max_sum_insured":2000.00,"theft_insured":false,"description":"test","conditions":"test","active":true,"min_duration_days":1,"max_duration_days":100}' | ${FORMAT}
 	#${POST} -d '{"shop_type": "C" }' ${HEAD}/getContractTypes | ${FORMAT}
+	${POST} -d '{}' ${HEAD}/listContract | ${FORMAT}
 	#${POST} -d '{}' ${HEAD}/listClaims | ${FORMAT}
-	${POST} -d '{}' ${HEAD}/fileClaim | ${FORMAT}
+	#${POST} -d '{}' ${HEAD}/fileClaim | ${FORMAT}
 	@echo "\n√ Finish testing APIs."
