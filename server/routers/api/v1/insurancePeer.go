@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	gouuid "github.com/nu7hatch/gouuid"
 	"github.com/stephenwu2020/fabric-insurance/server/blockchain"
 	"github.com/stephenwu2020/fabric-insurance/server/pkg/app"
 )
@@ -139,6 +140,14 @@ func FileClaim(ctx *gin.Context) {
 		Description  string    `json:"description"`
 		IsTheft      bool      `json:"is_theft"`
 	}{}
+	now := time.Now()
+	uuid, err := gouuid.NewV4()
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	body.UUID = uuid.String()
+	body.Date = now
 	if err := ctx.ShouldBind(&body); err != nil {
 		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
 		return
