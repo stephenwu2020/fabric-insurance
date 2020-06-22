@@ -44,22 +44,14 @@ restart-sleep:
 .PHONY: restart-network
 restart-network: stop-network restart-sleep start-network
 
-.PHONY: api-test
-api-test: API_HEAD=localhost:8000/api/v1
-api-test: HEADER=--header "Content-Type: application/json"
-api-test:
+.PHONY: test
+test: API_HEAD=localhost:8000/api/v1
+test: HEADER=--header "Content-Type: application/json"
+test: POST=curl -XPOST -s --header "Content-Type: application/json" 
+test: FORMAT=python -m json.tool
+test:
 	@echo "√ Start testing APIs ...\n"
-	curl ${API_HEAD}/getContractTypes
-	@echo "\n\n√ Finish testing APIs."
-#	curl ${API_HEAD}/hello
-#	@echo "\n"
-#	curl -XPOST ${API_HEAD}/queryAllCars
-#	@echo "\n"
-#	curl -XPOST -d '{"key": "CAR0"}' ${HEADER} ${API_HEAD}/queryCar
-#	@echo "\n"
-#	curl -XPOST -d '{"make":"Ferrari","model":"488","colour":"Red","owner":"Kimi"}' ${HEADER} ${API_HEAD}/createCar
-#	@echo "\n"
-#	curl -XPOST -d '{"key":"CAR1","owner":"Baby"}' ${HEADER} ${API_HEAD}/changeCarOwner
-#	@echo "\n"
-#	curl -XPOST ${API_HEAD}/queryAllCars
-#	@echo "\n\n√ Finish testing APIs."
+	#${POST} -d '{}' ${API_HEAD}/getContractTypes | ${FORMAT}
+	${POST} -d '{"uuid": "63ef076a-33a1-41d2-a9bc-2777505b014f", "active": false}' ${API_HEAD}/activeContractType | ${FORMAT}
+	${POST} -d '{"shop_type": "B" }' ${API_HEAD}/getContractTypes | ${FORMAT}
+	@echo "\n√ Finish testing APIs."

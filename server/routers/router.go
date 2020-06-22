@@ -19,7 +19,9 @@ func InitRouter() *gin.Engine {
 	r.Use(Cors())
 	apiV1 := r.Group("/api/v1")
 	apiV1.GET("/hello", v1.Hello)
-	apiV1.GET("/getContractTypes", v1.GetContractTypes)
+	apiV1.POST("/getContractTypes", v1.GetContractTypes)
+	apiV1.POST("/createContractType", v1.CreateContractType)
+	apiV1.POST("/activeContractType", v1.ActiveContractType)
 
 	apiV2 := r.Group("/api/v2")
 	apiV2.GET("/hello", v2.Hello)

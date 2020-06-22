@@ -25,7 +25,7 @@
 - make stop-server
 
 ## test server api
-- make api-test
+- make test
 
 ## Experience
 - localhost:8000
