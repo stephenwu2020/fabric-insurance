@@ -45,14 +45,16 @@ restart-sleep:
 restart-network: stop-network restart-sleep start-network
 
 .PHONY: test
-test: API_HEAD=localhost:8000/api/v1
+test: HEAD=localhost:8000/api/v1
 test: POST=curl -XPOST -s --header "Content-Type: application/json" 
 test: FORMAT=python -m json.tool
 test:
 	@echo "√ Start testing APIs ...\n"
-	#${POST} -d '{}' ${API_HEAD}/getContractTypes | ${FORMAT}
-	#${POST} -d '{"uuid": "63ef076a-33a1-41d2-a9bc-2777505b014f", "active": false}' ${API_HEAD}/activeContractType | ${FORMAT}
-	#${POST} -d '{"shop_type": "B" }' ${API_HEAD}/getContractTypes | ${FORMAT}
-	${POST} ${API_HEAD}/createContractType -d '{"uuid":"12345","shop_type":"C","formula_per_day":"30.00","max_sum_insured":2000.00,"theft_insured":false,"description":"test","conditions":"test","active":true,"min_duration_days":1,"max_duration_days":100}' | ${FORMAT}
-	${POST} -d '{"shop_type": "C" }' ${API_HEAD}/getContractTypes | ${FORMAT}
+	#${POST} -d '{}' ${HEAD}/getContractTypes | ${FORMAT}
+	#${POST} -d '{"uuid": "63ef076a-33a1-41d2-a9bc-2777505b014f", "active": false}' ${HEAD}/activeContractType | ${FORMAT}
+	#${POST} -d '{"shop_type": "B" }' ${HEAD}/getContractTypes | ${FORMAT}
+	#${POST} ${HEAD}/createContractType -d '{"uuid":"12345","shop_type":"C","formula_per_day":"30.00","max_sum_insured":2000.00,"theft_insured":false,"description":"test","conditions":"test","active":true,"min_duration_days":1,"max_duration_days":100}' | ${FORMAT}
+	#${POST} -d '{"shop_type": "C" }' ${HEAD}/getContractTypes | ${FORMAT}
+	#${POST} -d '{}' ${HEAD}/listClaims | ${FORMAT}
+	${POST} -d '{}' ${HEAD}/fileClaim | ${FORMAT}
 	@echo "\n√ Finish testing APIs."

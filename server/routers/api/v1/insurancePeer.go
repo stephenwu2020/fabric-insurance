@@ -3,6 +3,7 @@ package v1
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stephenwu2020/fabric-insurance/server/blockchain"
@@ -88,6 +89,68 @@ func ActiveContractType(ctx *gin.Context) {
 	}
 	args := [][]byte{arg0}
 	_, err = blockchain.ChannelExecute("contract_type_set_active", args)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	appGin.Response(http.StatusOK, "success", nil)
+}
+
+func ListClaims(ctx *gin.Context) {
+	appGin := app.Gin{C: ctx}
+	body := struct {
+		Status blockchain.ClaimStatus `json:"status"`
+	}{}
+	if err := ctx.ShouldBind(&body); err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	args := [][]byte{}
+	if body.Status != 0 {
+		arg0, err := json.Marshal(&body)
+		if err != nil {
+			appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+			return
+		}
+		args = append(args, arg0)
+	}
+
+	rsp, err := blockchain.ChannelExecute("claim_ls", args)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+
+	data := []interface{}{}
+	err = json.Unmarshal(rsp.Payload, &data)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	appGin.Response(http.StatusOK, "success", data)
+}
+
+func FileClaim(ctx *gin.Context) {
+	appGin := app.Gin{C: ctx}
+	body := struct {
+		UUID         string    `json:"uuid"`
+		ContractUUID string    `json:"contract_uuid"`
+		Date         time.Time `json:"date"`
+		Description  string    `json:"description"`
+		IsTheft      bool      `json:"is_theft"`
+	}{}
+	if err := ctx.ShouldBind(&body); err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	args := [][]byte{}
+	arg0, err := json.Marshal(&body)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	args = append(args, arg0)
+	_, err = blockchain.ChannelExecute("claim_file", args)
 	if err != nil {
 		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
 		return
