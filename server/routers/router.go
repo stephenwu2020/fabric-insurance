@@ -23,6 +23,7 @@ func InitRouter() *gin.Engine {
 	apiV1.POST("/createContractType", v1.CreateContractType)
 	apiV1.POST("/activeContractType", v1.ActiveContractType)
 	apiV1.POST("/listContract", v1.ListContract)
+	apiV1.POST("/createContract", v1.CreateContract)
 	apiV1.POST("/listClaims", v1.ListClaims)
 	apiV1.POST("/fileClaim", v1.FileClaim)
 

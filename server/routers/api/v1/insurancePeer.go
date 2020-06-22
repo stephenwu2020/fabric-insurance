@@ -3,6 +3,7 @@ package v1
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -123,6 +124,78 @@ func ListContract(ctx *gin.Context) {
 	data := []interface{}{}
 	err = json.Unmarshal(rsp.Payload, &data)
 	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	appGin.Response(http.StatusOK, "success", data)
+}
+
+func CreateContract(ctx *gin.Context) {
+	appGin := app.Gin{C: ctx}
+	body := struct {
+		ContractTypeUUID string          `json:"contract_type_uuid"`
+		Username         string          `json:"username"`
+		Password         string          `json:"password"`
+		FirstName        string          `json:"first_name"`
+		LastName         string          `json:"last_name"`
+		Item             blockchain.Item `json:"item"`
+		StartDate        string          `json:"start_date"`
+		EndDate          string          `json:"end_date"`
+	}{}
+	if err := ctx.ShouldBind(&body); err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	input := struct {
+		UUID             string          `json:"uuid"`
+		ContractTypeUUID string          `json:"contract_type_uuid"`
+		Username         string          `json:"username"`
+		Password         string          `json:"password"`
+		FirstName        string          `json:"first_name"`
+		LastName         string          `json:"last_name"`
+		Item             blockchain.Item `json:"item"`
+		StartDate        time.Time       `json:"start_date"`
+		EndDate          time.Time       `json:"end_date"`
+	}{}
+
+	uuid, err := gouuid.NewV4()
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	start, err := strconv.ParseInt(body.StartDate, 10, 64)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	startDate := time.Unix(start, 0)
+	end, err := strconv.ParseInt(body.EndDate, 10, 64)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	endDate := time.Unix(end, 0)
+
+	input.UUID = uuid.String()
+	input.ContractTypeUUID = body.ContractTypeUUID
+	input.Username = body.Username
+	input.Password = body.Password
+	input.FirstName = body.FirstName
+	input.LastName = body.LastName
+	input.Item = body.Item
+	input.StartDate = startDate
+	input.EndDate = endDate
+
+	args := [][]byte{}
+	arg0, err := json.Marshal(&input)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	args = append(args, arg0)
+	rsp, err := blockchain.ChannelExecute("contract_create", args)
+	data := map[string]interface{}{}
+	if err := json.Unmarshal(rsp.Payload, &data); err != nil {
 		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
 		return
 	}

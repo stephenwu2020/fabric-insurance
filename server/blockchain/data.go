@@ -25,7 +25,7 @@ type ContractTypeWithUUID struct {
 // Key consists of prefix + username + UUID of the contract
 type Contract struct {
 	Username         string    `json:"username"`
-	Item             item      `json:"item"`
+	Item             Item      `json:"item"`
 	StartDate        time.Time `json:"start_date"`
 	EndDate          time.Time `json:"end_date"`
 	Void             bool      `json:"void"`
@@ -33,8 +33,13 @@ type Contract struct {
 	ClaimIndex       []string  `json:"claim_index,omitempty"`
 }
 
+type ContractWithUUID struct {
+	UUID string `json:"uuid"`
+	*Contract
+}
+
 // Entity not persisted on its own
-type item struct {
+type Item struct {
 	ID          int32   `json:"id"`
 	Brand       string  `json:"brand"`
 	Model       string  `json:"model"`
@@ -70,6 +75,6 @@ type user struct {
 type repairOrder struct {
 	ClaimUUID    string `json:"claim_uuid"`
 	ContractUUID string `json:"contract_uuid"`
-	Item         item   `json:"item"`
+	Item         Item   `json:"item"`
 	Ready        bool   `json:"ready"`
 }
