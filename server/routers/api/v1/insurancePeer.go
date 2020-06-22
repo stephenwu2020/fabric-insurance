@@ -63,19 +63,12 @@ func CreateContractType(ctx *gin.Context) {
 	}
 
 	args := [][]byte{arg0}
-	rsp, err := blockchain.ChannelExecute("contract_type_create", args)
+	_, err = blockchain.ChannelExecute("contract_type_create", args)
 	if err != nil {
 		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
 		return
 	}
-
-	var data interface{}
-	err = json.Unmarshal(rsp.Payload, &data)
-	if err != nil {
-		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
-		return
-	}
-	appGin.Response(http.StatusOK, "success", data)
+	appGin.Response(http.StatusOK, "success", nil)
 }
 
 func ActiveContractType(ctx *gin.Context) {
