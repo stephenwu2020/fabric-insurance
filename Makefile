@@ -57,7 +57,8 @@ test:
 	#${POST} -d '{"shop_type": "C" }' ${HEAD}/getContractTypes | ${FORMAT}
 	#${POST} ${HEAD}/createContract -d '{"contract_type_uuid":"63ef076a-33a1-41d2-a9bc-2777505b014f","username":"adom","password":"123456","first_name":"Adom","last_name":"G","start_date":"1592814596","end_date":"1592814695","item":{"id":1,"brand":"DJI","model":"S","price":10.00,"description":"good","serial_no":"1232fe"}}' | ${FORMAT}
 	#${POST} -d '{}' ${HEAD}/listContract | ${FORMAT}
-	${POST} -d '{"username":"adom"}' ${HEAD}/getUser | ${FORMAT}
+	#${POST} -d '{"username":"adom"}' ${HEAD}/getUser | ${FORMAT}
+	${POST} -d '{"username":"adom", "password":"1234568"}' ${HEAD}/authUser | ${FORMAT}
 	#${POST} -d '{}' ${HEAD}/listClaims | ${FORMAT}
 	#${POST} -d '{}' ${HEAD}/fileClaim | ${FORMAT}
 	@echo "\n√ Finish testing APIs."

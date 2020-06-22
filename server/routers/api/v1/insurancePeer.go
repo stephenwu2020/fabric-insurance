@@ -266,6 +266,38 @@ func GetUser(ctx *gin.Context) {
 	appGin.Response(http.StatusOK, "success", data)
 }
 
+func AuthUser(ctx *gin.Context) {
+	appGin := app.Gin{C: ctx}
+	body := struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}{}
+	if err := ctx.ShouldBind(&body); err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	args := [][]byte{}
+	arg0, err := json.Marshal(&body)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	args = append(args, arg0)
+	rsp, err := blockchain.ChannelExecute("user_authenticate", args)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+
+	var data interface{}
+	err = json.Unmarshal(rsp.Payload, &data)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	appGin.Response(http.StatusOK, "success", data)
+}
+
 func FileClaim(ctx *gin.Context) {
 	appGin := app.Gin{C: ctx}
 	body := struct {
