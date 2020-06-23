@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "element-ui": "^2.4.5",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vue-router-layout": "^0.1.2",
@@ -20,6 +21,7 @@
     "@vue/cli-service": "~4.4.0",
     "vue-auto-routing": "^0.5.0",
     "vue-cli-plugin-auto-routing": "~0.4.1",
+    "vue-cli-plugin-element": "~1.0.1",
     "vue-template-compiler": "^2.6.11"
   }
 }
