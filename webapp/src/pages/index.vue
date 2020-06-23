@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <img src="../assets/logo.png">
-    <div class="home-hi">Hi</div>
+    <img class="home-logo" src="@/assets/logo.png" alt="">
+    <div class="home-hi">Fabric Insurance</div>
   </div>
 </template>
 
@@ -13,6 +13,10 @@ export default {
 
 <style lang="postcss" scoped>
 .home{
+  &-logo{
+    margin-top: 10vh;
+    width: 200px;
+  }
   &-hi{
     color: green;
   }
