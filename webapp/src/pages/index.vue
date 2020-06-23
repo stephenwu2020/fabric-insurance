@@ -8,6 +8,16 @@
 <script>
 export default {
   name: 'home',
+  created(){
+    this.$axios
+      .get('/hello')
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }
 }
 </script>
 
