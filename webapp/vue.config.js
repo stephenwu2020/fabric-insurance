@@ -3,5 +3,14 @@ module.exports = {
     autoRouting: {
       chunkNamePrefix: 'page-'
     }
+  },
+  css: {
+    loaderOptions: {
+      postcss: {
+        plugins: [
+          require('postcss-nested')
+        ]
+      }
+    }
   }
 }
