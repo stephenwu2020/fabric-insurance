@@ -31,10 +31,6 @@ func InitRouter() *gin.Engine {
 
 	apiV2 := r.Group("/api/v2")
 	apiV2.GET("/hello", v2.Hello)
-	apiV2.POST("/queryAllCars", v2.QueryAllCars)
-	apiV2.POST("/queryCar", v2.QueryCar)
-	apiV2.POST("/createCar", v2.CreateCar)
-	apiV2.POST("/changeCarOwner", v2.ChangeCarOwner)
 
 	// static file
 	r.Use(static.Serve("/", static.LocalFile("./dist", true)))
