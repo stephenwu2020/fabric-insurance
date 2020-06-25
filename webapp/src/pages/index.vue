@@ -1,13 +1,14 @@
 <template>
   <div class="home">
-    <img class="home-logo" src="@/assets/logo.png" alt="">
-    <div class="home-hi">Fabric Insurance</div>
+    <MainIntro />
   </div>
 </template>
 
 <script>
+import MainIntro from '@/components/MainIntro.vue'
 export default {
   name: 'home',
+  components: {MainIntro},
   created(){
     this.$axios
       .get('/hello')
