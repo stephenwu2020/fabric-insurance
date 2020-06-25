@@ -1,10 +1,10 @@
 <template>
   <div class="header">
-    <div class="header-logo">FabINS</div>
-    <div class="header-link">Shop</div>
-    <div class="header-link">Repair</div>
-    <div class="header-link">Police</div>
-    <div class="header-link">Insurance</div>
+    <router-link class="header-logo" to="/">FabINS</router-link>
+    <router-link class="header-link" to="/shop">Shop</router-link>
+    <router-link class="header-link" to="/repair">Repair</router-link>
+    <router-link class="header-link" to="/police">Police</router-link>
+    <router-link class="header-link" to="/insurance">Insurance</router-link>
   </div>
 </template>
 
@@ -18,9 +18,11 @@
   border-bottom: 1px solid #ccc;
   align-items: center;
   &-logo,&-link{
+    text-decoration: none;
     padding: 0 20px;
     cursor: pointer;
     user-select: none;
+    color: #333;
   }
   &-logo{
     font-weight: bolder;

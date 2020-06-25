@@ -4,7 +4,7 @@
       <Header />
     </div>
     <div class="layoutdef-content">
-      <router-view /> 
+      <transition name="fade"><router-view /> </transition>
       <p class="layoutdef-foot">© 2020 Fabric Insurance, Inc</p>
     </div>
   </div>
@@ -37,4 +37,15 @@ export default {
     margin-top: 30px;
   }
 }
+.fade-enter{
+  opacity: 0;
+}
+.fade-enter-active,
+.fade-enter-leave{
+  transition: opacity 1s;
+}
+.fade-leave{
+  opacity: 1;
+}
+
 </style>
