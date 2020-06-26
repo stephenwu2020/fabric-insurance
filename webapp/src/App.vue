@@ -4,6 +4,15 @@
   </div>
 </template>
 
+<script>
+import config from '@/config/config.js'
+export default {
+  created(){
+    this.$store.commit('initProducts', config.products)
+  }
+}
+</script>
+
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
