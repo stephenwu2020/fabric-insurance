@@ -29,7 +29,7 @@ func defaultContractTypes() []ContractTypeWithUUID {
 			FormulaPerDay:   "price * 0.001 + 5.00",
 			MaxSumInsured:   1500.00,
 			TheftInsured:    true,
-			Description:     "Phone Insurance Contract'",
+			Description:     "Phone Insurance Contract",
 			Conditions:      "Exemplary contract terms here.",
 			Active:          true,
 			MinDurationDays: 5,

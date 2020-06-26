@@ -9,6 +9,18 @@ import config from '@/config/config.js'
 export default {
   created(){
     this.$store.commit('initProducts', config.products)
+    this.getContractType()
+  },
+  methods: {
+    getContractType(){
+      this.$axios.post('getContractTypes')
+        .then(res => {
+          if(res.msg == 'success'){
+            const products = res.data
+            this.$store.commit('initContractTypes', products)
+          }
+        })
+    }
   }
 }
 </script>

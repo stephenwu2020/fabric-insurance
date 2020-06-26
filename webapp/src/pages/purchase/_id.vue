@@ -5,6 +5,16 @@
     </div>
     <div class="purchase-form">
       <el-form ref="form" :model="formdata" label-width="120px" v-loading="loading">
+        <el-form-item label="Contract:">
+          <el-select v-model="formdata.contract_type_uuid" placeholder="Select" >
+            <el-option
+              v-for="item in contractTypes"
+              :key="item.uuid"
+              :label="item.description"
+              :value="item.uuid">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="First Name:">
           <el-input v-model="formdata.first_name"></el-input>
         </el-form-item>
@@ -53,7 +63,8 @@ export default {
   },
   computed: {
     ...mapState({
-      products: state => state.products
+      products: state => state.products,
+      contractTypes: state => state.contractTypes,
     }),
     activeId(){
       return this.$route.params.id
@@ -64,9 +75,6 @@ export default {
       })
       return product
     }
-  },
-  created(){
-    console.log("product id:", this.$route.params.id)
   },
   methods: {
     getImg(){
@@ -81,10 +89,27 @@ export default {
       }
       return ts.toFixed(0)
     },
+    checkForm(){
+      let findEmpty = false
+      Object.keys(this.formdata).forEach(k => {
+        if(!this.formdata[k]){
+          findEmpty = true
+        }
+      })
+      if (findEmpty){
+        this.$message({
+          message: 'You have to full fill the form.',
+          type: 'warning'
+        });
+      }
+      return !findEmpty
+    },
     submit(){
+      if(!this.checkForm()){
+        return
+      }
       let requestData = {}
       Object.assign(requestData, this.formdata)
-      requestData.contract_type_uuid = '63ef076a-33a1-41d2-a9bc-2777505b014f'
       requestData.start_date = this.parseDate(requestData.start_date)
       requestData.end_date = this.parseDate(requestData.end_date)
       requestData.item = {}
@@ -135,6 +160,9 @@ export default {
       width: 500px;
       margin: 20px auto;
       padding: 20px;
+    }
+    .el-select{
+      width: 100%;
     }
     &__submit{
       float: left;
