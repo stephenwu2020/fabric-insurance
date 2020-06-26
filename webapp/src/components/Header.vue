@@ -2,6 +2,7 @@
   <div class="header">
     <router-link class="header-logo" to="/">FabINS</router-link>
     <router-link class="header-link" to="/shop">Shop</router-link>
+    <router-link class="header-link" to="/contract">Contract</router-link>
     <router-link class="header-link" to="/repair">Repair</router-link>
     <router-link class="header-link" to="/police">Police</router-link>
     <router-link class="header-link" to="/insurance">Insurance</router-link>
