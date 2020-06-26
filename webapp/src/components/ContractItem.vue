@@ -1,6 +1,7 @@
 <template>
   <div class="item">
     <p class="item-title">Contract</p>
+    <p class="item-id">{{this.item.uuid}}</p>
     <span class="item-line" v-for="count in 7" :key="count"></span>
     <div class="item-sign">
       <div class="item-sign__circle"></div>
@@ -9,14 +10,30 @@
   </div>
 </template>
 
+<script>
+export default {
+  props: ["item"],
+}
+</script>
+
 <style lang="postcss" scoped>
 .item{
+  flex-shrink: 0;
+  margin: 5px 20px;
+  padding: 10px 0;
   background-color: #fff;
   width: 300px;
   height: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-radius: 10px;
+  &-id{
+    max-width: 80%;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+  }
   &-title{
     font-size: 20px;
     font-weight: bold;

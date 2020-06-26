@@ -125,7 +125,11 @@ export default {
               confirmButtonText: 'OK',
               showClose: false,
               callback: action => {
-                this.$router.push("/shop")
+                //this.$router.push("/shop")
+                this.$router.push({
+                  path: "/contract",
+                  query: {username: res.data.username}
+                })
               }
             })
           }
