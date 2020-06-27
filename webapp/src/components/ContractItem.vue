@@ -72,6 +72,7 @@ export default {
             })
           }
           this.hideDialog()
+          this.$router.push('/insurance')
         })
         .finally(() => {
           this.loading = false

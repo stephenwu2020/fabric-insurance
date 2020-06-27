@@ -120,7 +120,6 @@ export default {
     }
   }
   &-buy{
-    margin-top: 20px;
     width: 300px;
   }
 }
