@@ -8,7 +8,7 @@
     <p>date: {{getDate}}</p>
     <p>status: {{item.status}}</p>
     <div class="claim-bot">
-      <el-button type="primary" size="mini" @click="process('R')">Repair</el-button>
+      <el-button v-if="!item.is_theft" type="primary" size="mini" @click="process('R')">Repair</el-button>
       <el-button type="success" size="mini" @click="process('F')">Reimburse</el-button>
       <el-button type="danger" size="mini" @click="process('J')">Reject</el-button>
     </div>

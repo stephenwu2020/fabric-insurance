@@ -2,9 +2,13 @@
   <div class="claim">
     <p>{{item.uuid}}</p>
     <p>description: {{item.description}}</p>
+    <el-row>
+      <span>Claim ref:</span>
+      <el-input class="claim-file" v-model="fileRef" size="mini"></el-input>
+    </el-row>
     <div class="claim-bot">
-      <el-button type="primary" size="mini" @click="processTheft('R')">Confirm</el-button>
-      <el-button type="danger" size="mini" @click="processTheft('J')">Reject</el-button>
+      <el-button type="primary" size="mini" @click="processTheft(true)">Confirm</el-button>
+      <el-button type="danger" size="mini" @click="processTheft(false)">Reject</el-button>
     </div>
   </div>
 </template>
@@ -12,6 +16,11 @@
 <script>
 export default {
   props: ["item"],
+  data() {
+    return {
+      fileRef: ''
+    }
+  },
   computed: {
     getDate(){
       let d = new Date(this.item.date)
@@ -19,38 +28,14 @@ export default {
     }
   },
   methods: {
-    process(code){
-      let ajaxdata = {
-        uuid: this.item.uuid,
-        contract_uuid: this.item.contract_uuid,
-        status: code,
-        reimbursable: 0
-      }
-      this.$axios.post('/processClaim', ajaxdata)
-        .then(res => {
-          if(res.msg == 'success'){
-            this.$message({
-              message: "This claim has been processed.",
-              type: 'success'
-            })
-            this.$emit("claimSuccess")
-          }
-        })
-        .catch(err => {
-          this.$message({
-            message: err.message,
-            type: 'error'
-          })
-        })
-    },
     processTheft(code){
       let ajaxdata = {
         uuid: this.item.uuid,
         contract_uuid: this.item.contract_uuid,
-        status: code,
-        reimbursable: 0
+        is_theft: code,
+        file_reference: this.file
       }
-      this.$axios.post('/processClaim', ajaxdata)
+      this.$axios.post('/processTheftClaim', ajaxdata)
         .then(res => {
           if(res.msg == 'success'){
             this.$message({
@@ -88,6 +73,10 @@ export default {
   text-align: left;
   p {
     margin: 10px 0;
+  }
+  &-file{
+    margin-top: 10px;
+    width: 200px;
   }
   &-bot{
     position: absolute;

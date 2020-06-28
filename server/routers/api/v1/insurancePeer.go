@@ -379,3 +379,31 @@ func ListTheftClaims(ctx *gin.Context) {
 	}
 	appGin.Response(http.StatusOK, "success", data)
 }
+
+func ProcessTheftClaim(ctx *gin.Context) {
+	appGin := app.Gin{C: ctx}
+	body := struct {
+		UUID          string `json:"uuid"`
+		ContractUUID  string `json:"contract_uuid"`
+		IsTheft       bool   `json:"is_theft"`
+		FileReference string `json:"file_reference"`
+	}{}
+	if err := ctx.ShouldBind(&body); err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	args := [][]byte{}
+	arg0, err := json.Marshal(&body)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	args = append(args, arg0)
+
+	_, err = blockchain.ChannelExecute("theft_claim_process", args)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	appGin.Response(http.StatusOK, "success", nil)
+}
