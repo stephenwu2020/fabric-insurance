@@ -1,7 +1,7 @@
 <template>
-  <div class="insurance">
+  <div class="insurance" v-loading="loading">
     <div class="insurance-list">
-      <ClaimItem v-for="item in claims" :key="item.uuid" :item="item"/> 
+      <ClaimItem v-for="item in claims" :key="item.uuid" :item="item" @claimSuccess="claimSuccess"/> 
     </div>
   </div>
 </template>
@@ -12,6 +12,7 @@ export default {
   components: { ClaimItem },
   data() {
     return {
+      loading: false,
       claims: []
     }
   },
@@ -22,6 +23,7 @@ export default {
     getClaims(){
       let newClaims = []
       let theftConfirmClaims = []
+      this.loading = true
       Promise.all([
         this.$axios.post('/listClaims', {status: 'N'}),
         this.$axios.post('/listClaims', {status: 'P'})
@@ -33,6 +35,12 @@ export default {
           theftConfirmClaims = resTheft.data
         this.claims = newClaims.concat(theftConfirmClaims)
       })
+      .finally(() => {
+        this.loading = false
+      })
+    },
+    claimSuccess(){
+      this.getClaims()
     }
   }
 }
@@ -46,6 +54,9 @@ export default {
   background: #90be6d;
   display: flex;
   align-items: center;
+  & >>> .el-loading-mask{
+    background: rgba(0, 0, 0, 0.2);
+  }
   &-list{
     margin: auto;
     overflow-x: auto;

@@ -39,6 +39,7 @@ export default {
               message: "This claim has been processed.",
               type: 'success'
             })
+            this.$emit("claimSuccess")
           }
         })
         .catch(err => {
