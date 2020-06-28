@@ -8,9 +8,9 @@
     <p>date: {{getDate}}</p>
     <p>status: {{item.status}}</p>
     <div class="claim-bot">
-      <el-button type="primary" size="mini" @click="process(3)">Repair</el-button>
-      <el-button type="success" size="mini" @click="process(4)">Reimburse</el-button>
-      <el-button type="danger" size="mini" @click="process(2)">Reject</el-button>
+      <el-button type="primary" size="mini" @click="process('R')">Repair</el-button>
+      <el-button type="success" size="mini" @click="process('F')">Reimburse</el-button>
+      <el-button type="danger" size="mini" @click="process('J')">Reject</el-button>
     </div>
   </div>
 </template>

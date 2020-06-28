@@ -24,14 +24,14 @@ export default {
       let theftConfirmClaims = []
       Promise.all([
         this.$axios.post('/listClaims', {status: 'N'}),
-        this.$axios.post('/listClaims', {status: 'N'})
+        this.$axios.post('/listClaims', {status: 'P'})
       ])
       .then(([resNew, resTheft]) => {
         if(resNew.msg == 'success')
           newClaims = resNew.data
         if(resTheft.msg == 'success')
           theftConfirmClaims = resTheft.data
-        this.claims = newClaims.join(theftConfirmClaims)
+        this.claims = newClaims.concat(theftConfirmClaims)
       })
     }
   }
