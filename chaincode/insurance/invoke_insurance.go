@@ -357,13 +357,14 @@ func processClaim(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	}
 
 	input := struct {
-		UUID         string      `json:"uuid"`
-		ContractUUID string      `json:"contract_uuid"`
-		Status       ClaimStatus `json:"status"`
-		Reimbursable float32     `json:"reimbursable"`
+		UUID         string  `json:"uuid"`
+		ContractUUID string  `json:"contract_uuid"`
+		Status       int8    `json:"status"`
+		Reimbursable float32 `json:"reimbursable"`
 	}{}
 	err := json.Unmarshal([]byte(args[0]), &input)
 	if err != nil {
+		logger.Error("first unmarshall func", args[0], input, err)
 		return shim.Error(err.Error())
 	}
 
@@ -380,6 +381,7 @@ func processClaim(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	claim := Claim{}
 	err = json.Unmarshal(claimBytes, &claim)
 	if err != nil {
+		logger.Error("second unmarshal func", claim.Status, err)
 		return shim.Error(err.Error())
 	}
 
@@ -391,8 +393,8 @@ func processClaim(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		return shim.Error("Theft must first be confirmed by authorities.")
 	}
 
-	claim.Status = input.Status // Assigning requested status
-	switch input.Status {
+	claim.Status = ClaimStatus(input.Status)
+	switch claim.Status {
 	case ClaimStatusRepair:
 		// Approve and create a repair order
 		if claim.IsTheft {

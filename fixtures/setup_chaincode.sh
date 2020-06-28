@@ -13,7 +13,7 @@ CURRENT="insurance"
 if [ "${CURRENT}" == "insurance" ]; then
   echo "setup insurance env..."
   NAME="insurance"
-  VERSION="1.2.0"
+  VERSION="1.3.3"
   PKG="github.com/stephenwu2020/fabric-insurance/chaincode/insurance"
   INS_MSG='{"Args":["init"]}'
   INV_MSG='{"function":"contract_type_ls","Args":[]}'

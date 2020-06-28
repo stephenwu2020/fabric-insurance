@@ -8,9 +8,9 @@
     <p>date: {{getDate}}</p>
     <p>status: {{item.status}}</p>
     <div class="claim-bot">
-      <el-button type="primary" size="mini">Repair</el-button>
-      <el-button type="success" size="mini">Reimburse</el-button>
-      <el-button type="danger" size="mini">Reject</el-button>
+      <el-button type="primary" size="mini" @click="process(3)">Repair</el-button>
+      <el-button type="success" size="mini" @click="process(4)">Reimburse</el-button>
+      <el-button type="danger" size="mini" @click="process(2)">Reject</el-button>
     </div>
   </div>
 </template>
@@ -22,6 +22,25 @@ export default {
     getDate(){
       let d = new Date(this.item.date)
       return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`
+    }
+  },
+  methods: {
+    process(code){
+      let ajaxdata = {
+        uuid: this.item.uuid,
+        contract_uuid: this.item.contract_uuid,
+        status: code,
+        reimbursable: 0
+      }
+      this.$axios.post('/processClaim', ajaxdata)
+        .then(res => {
+          if(res.msg == 'success'){
+            this.$message({
+              message: "This claim has been processed.",
+              type: 'success'
+            })
+          }
+        })
     }
   }
 }

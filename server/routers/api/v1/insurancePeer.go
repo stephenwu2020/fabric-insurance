@@ -353,6 +353,7 @@ func ProcessClaim(ctx *gin.Context) {
 		return
 	}
 	args = append(args, arg0)
+
 	_, err = blockchain.ChannelExecute("claim_process", args)
 	if err != nil {
 		appGin.Response(http.StatusInternalServerError, "fail", err.Error())

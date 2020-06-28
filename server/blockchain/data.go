@@ -62,6 +62,21 @@ type Claim struct {
 
 type ClaimStatus int8
 
+const (
+	// The claims status is unknown
+	ClaimStatusUnknown ClaimStatus = iota
+	// The claim is new
+	ClaimStatusNew
+	// The claim has been rejected (either by the insurer, or by authorities
+	ClaimStatusRejected
+	// The item is up for repairs, or has been repaired
+	ClaimStatusRepair
+	// The customer should be reimbursed, or has already been
+	ClaimStatusReimbursement
+	// The theft of the item has been confirmed by authorities
+	ClaimStatusTheftConfirmed
+)
+
 // Key consists of prefix + username
 type user struct {
 	Username      string   `json:"username"`
