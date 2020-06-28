@@ -407,3 +407,46 @@ func ProcessTheftClaim(ctx *gin.Context) {
 	}
 	appGin.Response(http.StatusOK, "success", nil)
 }
+
+func ListRepairOrders(ctx *gin.Context) {
+	appGin := app.Gin{C: ctx}
+	args := [][]byte{}
+	rsp, err := blockchain.ChannelExecute("repair_order_ls", args)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+
+	data := []interface{}{}
+	err = json.Unmarshal(rsp.Payload, &data)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	appGin.Response(http.StatusOK, "success", data)
+}
+
+func RepairCompelete(ctx *gin.Context) {
+	appGin := app.Gin{C: ctx}
+	body := struct {
+		UUID string `json:"uuid"`
+	}{}
+	if err := ctx.ShouldBind(&body); err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	args := [][]byte{}
+	arg0, err := json.Marshal(&body)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	args = append(args, arg0)
+
+	_, err = blockchain.ChannelExecute("repair_order_complete", args)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	appGin.Response(http.StatusOK, "success", nil)
+}
