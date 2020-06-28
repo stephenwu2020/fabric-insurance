@@ -18,7 +18,7 @@ instance.interceptors.response.use(
     return response.data
   },
   error => {
-    return error
+    throw error
   })
 
 Vue.prototype.$axios = instance
