@@ -20,11 +20,19 @@ export default {
   },
   methods: {
     getClaims(){
-      this.$axios.post('listClaims', {})
-        .then(res => {
-          if(res.msg == 'success')
-            this.claims = res.data
-        })
+      let newClaims = []
+      let theftConfirmClaims = []
+      Promise.all([
+        this.$axios.post('/listClaims', {status: 'N'}),
+        this.$axios.post('/listClaims', {status: 'N'})
+      ])
+      .then(([resNew, resTheft]) => {
+        if(resNew.msg == 'success')
+          newClaims = resNew.data
+        if(resTheft.msg == 'success')
+          theftConfirmClaims = resTheft.data
+        this.claims = newClaims.join(theftConfirmClaims)
+      })
     }
   }
 }

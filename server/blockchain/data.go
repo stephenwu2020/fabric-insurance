@@ -1,6 +1,8 @@
 package blockchain
 
 import (
+	"encoding/json"
+	"strings"
 	"time"
 )
 
@@ -61,6 +63,53 @@ type Claim struct {
 }
 
 type ClaimStatus int8
+
+func (s *ClaimStatus) UnmarshalJSON(b []byte) error {
+	var value string
+	if err := json.Unmarshal(b, &value); err != nil {
+		return err
+	}
+
+	switch strings.ToUpper(value) {
+	default:
+		*s = ClaimStatusUnknown
+	case "N":
+		*s = ClaimStatusNew
+	case "J":
+		*s = ClaimStatusRejected
+	case "R":
+		*s = ClaimStatusRepair
+	case "F":
+		*s = ClaimStatusReimbursement
+	case "P":
+		*s = ClaimStatusTheftConfirmed
+	}
+
+	return nil
+}
+
+func (s ClaimStatus) MarshalJSON() ([]byte, error) {
+	var value string
+
+	switch s {
+	default:
+		fallthrough
+	case ClaimStatusUnknown:
+		value = ""
+	case ClaimStatusNew:
+		value = "N"
+	case ClaimStatusRejected:
+		value = "J"
+	case ClaimStatusRepair:
+		value = "R"
+	case ClaimStatusReimbursement:
+		value = "F"
+	case ClaimStatusTheftConfirmed:
+		value = "P"
+	}
+
+	return json.Marshal(value)
+}
 
 const (
 	// The claims status is unknown
