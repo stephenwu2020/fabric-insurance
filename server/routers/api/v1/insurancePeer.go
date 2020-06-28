@@ -333,3 +333,30 @@ func FileClaim(ctx *gin.Context) {
 	}
 	appGin.Response(http.StatusOK, "success", nil)
 }
+
+func ProcessClaim(ctx *gin.Context) {
+	appGin := app.Gin{C: ctx}
+	body := struct {
+		UUID         string                 `json:"uuid"`
+		ContractUUID string                 `json:"contract_uuid"`
+		Status       blockchain.ClaimStatus `json:"status"`
+		Reimbursable float32                `json:"reimbursable"`
+	}{}
+	if err := ctx.ShouldBind(&body); err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	args := [][]byte{}
+	arg0, err := json.Marshal(&body)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	args = append(args, arg0)
+	_, err = blockchain.ChannelExecute("claim_process", args)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	appGin.Response(http.StatusOK, "success", nil)
+}
