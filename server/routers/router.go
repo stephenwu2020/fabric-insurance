@@ -29,6 +29,7 @@ func InitRouter() *gin.Engine {
 	apiV1.POST("/processClaim", v1.ProcessClaim)
 	apiV1.POST("/getUser", v1.GetUser)
 	apiV1.POST("/authUser", v1.AuthUser)
+	apiV1.POST("/listTheftClaims", v1.ListTheftClaims)
 
 	apiV2 := r.Group("/api/v2")
 	apiV2.GET("/hello", v2.Hello)

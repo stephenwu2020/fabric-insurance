@@ -361,3 +361,21 @@ func ProcessClaim(ctx *gin.Context) {
 	}
 	appGin.Response(http.StatusOK, "success", nil)
 }
+
+func ListTheftClaims(ctx *gin.Context) {
+	appGin := app.Gin{C: ctx}
+	args := [][]byte{}
+	rsp, err := blockchain.ChannelExecute("theft_claim_ls", args)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+
+	data := []interface{}{}
+	err = json.Unmarshal(rsp.Payload, &data)
+	if err != nil {
+		appGin.Response(http.StatusInternalServerError, "fail", err.Error())
+		return
+	}
+	appGin.Response(http.StatusOK, "success", data)
+}
