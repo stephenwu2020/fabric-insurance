@@ -1,15 +1,15 @@
 <template>
   <div class="pol" v-loading="loading">
     <div class="pol-list">
-      <ClaimItem v-for="item in claims" :key="item.uuid" :item="item" @claimSuccess="claimSuccess"/> 
+      <ClaimTheftItem v-for="item in claims" :key="item.uuid" :item="item" @claimSuccess="claimSuccess"/> 
     </div>
   </div>
 </template>
 
 <script>
-import ClaimItem from '@/components/ClaimItem.vue'
+import ClaimTheftItem from '@/components/ClaimTheftItem.vue'
 export default {
-  components: { ClaimItem },
+  components: { ClaimTheftItem },
   data() {
     return {
       loading: false,
@@ -44,8 +44,8 @@ export default {
 <style lang="postcss" scoped>
 .pol{
   min-height: 80vh;
-  border: 1px solid #90be6d;
-  background: #90be6d;
+  border: 1px solid #023e8a;
+  background: #023e8a;
   display: flex;
   align-items: center;
   & >>> .el-loading-mask{
