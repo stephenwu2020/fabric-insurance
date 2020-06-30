@@ -1,36 +1,36 @@
 <template>
   <div class="claim" v-loading="loading">
     <p class="claim-title">Claim</p>
-    <p>
+    <div class="claim-line">
       <span>Claim Id:</span>
       <span class="claim-id">{{item.uuid}}</span>
-    </p>
-    <p>
+    </div>
+    <div class="claim-line">
       <span>Description:</span>
       <span class="claim-desc">{{item.description}}</span>
-    </p>
-    <p>
+    </div>
+    <div class="claim-line">
       <span>Is Theft:</span>
       <i v-if="item.is_theft" class="el-icon-circle-check" style="color:green"></i>
       <i v-else class="el-icon-circle-close" style="color:red"></i>
-    </p>
-    <p>
+    </div>
+    <div class="claim-line">
       <span>Reimbursable:</span>
       <span>{{item.reimbursable}}</span>
-    </p>
-    <p>
+    </div>
+    <div class="claim-line">
       <span>Repair:</span>
       <i v-if="item.repaired" class="el-icon-circle-check" style="color:green"></i>
       <i v-else class="el-icon-circle-close" style="color:red"></i>
-    </p>
-    <p>
+    </div>
+    <div class="claim-line">
       <span>Date:</span>
       <span>{{getDate}}</span>
-    </p>
-    <p>
+    </div>
+    <div class="claim-line">
       <span>Status:</span>
       <span>{{item.status}}</span>
-    </p>
+    </div>
     <div class="claim-bot">
       <el-button v-if="!item.is_theft" type="primary" size="mini" @click="process('R')">Repair</el-button>
       <el-button type="success" size="mini" @click="process('F')">Reimburse</el-button>
@@ -122,13 +122,16 @@ export default {
     overflow: hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
-    text-align: right;
   }
-  p {
+  &-line {
     width: 100%;
+    padding: 0 10px;
     display: flex;
-    justify-content: space-between;
     margin: 5px 0;
+    box-sizing: border-box;
+    span, i{
+      flex: 1;
+    }
   }
   &-bot{
     padding: 10px;
