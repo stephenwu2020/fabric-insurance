@@ -1,5 +1,6 @@
 <template>
   <div class="item">
+    <img :src="getImg()" alt="" class="item-img">
     <p class="item-title">Contract</p>
     <p class="item-id">{{this.item.uuid}}</p>
     <span class="item-line" v-for="count in 7" :key="count"></span>
@@ -34,6 +35,7 @@
 </template>
 
 <script>
+import config from '@/config/config.js'
 export default {
   props: ["item"],
   data() {
@@ -78,6 +80,14 @@ export default {
           this.loading = false
         })
     },
+    getImg(){
+      let itemCfg =config.products.find(e => {
+        return e.id == this.item.item.id
+      })
+      if(!itemCfg) return ""
+
+      return require("@/assets/products/"+itemCfg.img)
+    },
     hideDialog() {
       this.dialogFormVisible = false
       this.loading = false
@@ -100,6 +110,13 @@ export default {
   flex-direction: column;
   align-items: center;
   border-radius: 10px;
+  position: relative;
+  &-img{
+    position: absolute;
+    width: 80%;
+    top: 30%;
+    opacity: 0.5;
+  }
   &-id{
     max-width: 80%;
     overflow: hidden;
