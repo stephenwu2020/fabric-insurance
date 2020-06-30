@@ -29,7 +29,4 @@
 
 ## Experience
 - localhost:8000
-![case1](https://github.com/stephenwu2020/fabric-insurance/blob/master/showcase/case01.png)
-![case2](https://github.com/stephenwu2020/fabric-insurance/blob/master/showcase/case02.png)
-![case3](https://github.com/stephenwu2020/fabric-insurance/blob/master/showcase/case03.png)
-
+![case](https://github.com/stephenwu2020/fabric-insurance/blob/master/showcase/case.png)
