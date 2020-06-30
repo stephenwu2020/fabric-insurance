@@ -102,10 +102,14 @@ export default {
     margin-top: 10px;
   }
   &-bot{
+    padding: 10px;
+    border-top: 1px solid #ccc;
     position: absolute;
-    bottom: 20px;
-    left: 30px;
-    margin-top: 20px;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    display: flex;
+    justify-content: flex-start;
     .el-button{
       width: 80px;
     }

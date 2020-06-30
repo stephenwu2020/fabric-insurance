@@ -1,7 +1,10 @@
 <template>
   <div class="claim">
-    <p>{{item.uuid}}</p>
-    <p>description: {{item.description}}</p>
+    <p class="claim-title">Repair Order</p>
+    <div class="claim-line">
+      <span>Reapir Id:</span>
+      <span>{{item.uuid}}</span>
+    </div>
     <div class="claim-bot">
       <el-button type="primary" size="mini" @click="repair">Repaired</el-button>
     </div>
@@ -63,18 +66,38 @@ export default {
   align-items: flex-start;
   justify-content: flex-start;
   text-align: left;
-  p {
-    margin: 10px 0;
+  &-title{
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+    font-weight: bold;
+  }
+   &-line {
+    width: 100%;
+    padding: 0 10px;
+    display: flex;
+    margin: 5px 0;
+    box-sizing: border-box;
+    span{
+      flex: 1;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
+    }
   }
   &-file{
     margin-top: 10px;
     width: 200px;
   }
   &-bot{
+    padding: 10px;
+    border-top: 1px solid #ccc;
     position: absolute;
-    bottom: 20px;
-    left: 30px;
-    margin-top: 20px;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    display: flex;
+    justify-content: flex-start;
     .el-button{
       width: 80px;
     }
