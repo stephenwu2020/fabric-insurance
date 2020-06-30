@@ -1,5 +1,5 @@
 <template>
-  <div class="claim">
+  <div class="claim" v-loading="loading">
     <p>{{item.uuid}}</p>
     <p>description: {{item.description}}</p>
     <p>is theft: {{item.is_theft}}</p>
@@ -18,6 +18,11 @@
 <script>
 export default {
   props: ["item"],
+  data() {
+    return {
+      loading: false
+    }
+  },
   computed: {
     getDate(){
       let d = new Date(this.item.date)
@@ -32,6 +37,7 @@ export default {
         status: code,
         reimbursable: 0
       }
+      this.loading = true
       this.$axios.post('/processClaim', ajaxdata)
         .then(res => {
           if(res.msg == 'success'){
@@ -47,6 +53,9 @@ export default {
             message: err.message,
             type: 'error',
           })
+        })
+        .finally(() => {
+          this.loading = false
         })
     }
   }
@@ -79,6 +88,9 @@ export default {
     .el-button{
       width: 80px;
     }
+  }
+  & >>> .el-loading-mask{
+    border-radius: 20px;
   }
 }
 </style>
