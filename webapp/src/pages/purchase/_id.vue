@@ -8,7 +8,7 @@
         <el-form-item label="Contract:">
           <el-select v-model="formdata.contract_type_uuid" placeholder="Select" >
             <el-option
-              v-for="item in contractTypes"
+              v-for="item in matchContracts"
               :key="item.uuid"
               :label="item.description"
               :value="item.uuid">
@@ -66,6 +66,12 @@ export default {
       products: state => state.products,
       contractTypes: state => state.contractTypes,
     }),
+    matchContracts(){
+      let matched = this.contractTypes.filter(e => {
+        return e.shop_type.includes(this.activeProduct.shop_type)
+      })
+      return matched
+    },
     activeId(){
       return this.$route.params.id
     },
