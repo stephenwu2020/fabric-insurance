@@ -1,12 +1,36 @@
 <template>
   <div class="claim" v-loading="loading">
-    <p>{{item.uuid}}</p>
-    <p>description: {{item.description}}</p>
-    <p>is theft: {{item.is_theft}}</p>
-    <p>reimbursable: {{item.reimbursable}}</p>
-    <p>repaired: {{item.repaired}}</p>
-    <p>date: {{getDate}}</p>
-    <p>status: {{item.status}}</p>
+    <p class="claim-title">Claim</p>
+    <p>
+      <span>Claim Id:</span>
+      <span class="claim-id">{{item.uuid}}</span>
+    </p>
+    <p>
+      <span>Description:</span>
+      <span class="claim-desc">{{item.description}}</span>
+    </p>
+    <p>
+      <span>Is Theft:</span>
+      <i v-if="item.is_theft" class="el-icon-circle-check" style="color:green"></i>
+      <i v-else class="el-icon-circle-close" style="color:red"></i>
+    </p>
+    <p>
+      <span>Reimbursable:</span>
+      <span>{{item.reimbursable}}</span>
+    </p>
+    <p>
+      <span>Repair:</span>
+      <i v-if="item.repaired" class="el-icon-circle-check" style="color:green"></i>
+      <i v-else class="el-icon-circle-close" style="color:red"></i>
+    </p>
+    <p>
+      <span>Date:</span>
+      <span>{{getDate}}</span>
+    </p>
+    <p>
+      <span>Status:</span>
+      <span>{{item.status}}</span>
+    </p>
     <div class="claim-bot">
       <el-button v-if="!item.is_theft" type="primary" size="mini" @click="process('R')">Repair</el-button>
       <el-button type="success" size="mini" @click="process('F')">Reimburse</el-button>
@@ -31,6 +55,14 @@ export default {
   },
   methods: {
     process(code){
+      if(this.item.status == 'N' && this.item.is_theft){
+        this.$message({
+          message: "Theft claim must confirm by police first!",
+          type: "warning"
+        })
+        return
+      }
+
       let ajaxdata = {
         uuid: this.item.uuid,
         contract_uuid: this.item.contract_uuid,
@@ -77,14 +109,36 @@ export default {
   align-items: flex-start;
   justify-content: flex-start;
   text-align: left;
+  &-title{
+    width: 100%;
+    text-align: center !important;
+    display: block !important;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+  }
+  &-id,&-desc{
+    display: inline-block;
+    width: 150px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    text-align: right;
+  }
   p {
-    margin: 10px 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
   }
   &-bot{
+    padding: 10px;
+    border-top: 1px solid #ccc;
     position: absolute;
-    bottom: 20px;
-    left: 30px;
-    margin-top: 20px;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    display: flex;
+    justify-content: flex-start;
     .el-button{
       width: 80px;
     }
