@@ -25,15 +25,22 @@ export default {
 }
 </script>
 
-<style>
+<style lang="postcss" >
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   text-align: center;
   color: #2c3e50;
   min-width: 1280px;
+
 }
 body{
   padding: 0;
   margin: 0;
+}
+
+.el-message{
+  left: unset !important;
+  right: 10px !important;
+  transform: unset !important;
 }
 </style>
