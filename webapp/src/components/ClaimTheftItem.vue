@@ -1,11 +1,18 @@
 <template>
   <div class="claim">
-    <p>{{item.uuid}}</p>
-    <p>description: {{item.description}}</p>
-    <el-row>
-      <span>Claim ref:</span>
-      <el-input class="claim-file" v-model="fileRef" size="mini"></el-input>
-    </el-row>
+    <p class="claim-title">Theft Claim</p>
+    <div class="claim-line">
+      <span>Claim Id:</span>
+      <span>{{item.uuid}}</span>
+    </div>
+    <div class="claim-line">
+      <span>Description:</span>
+      <span>{{item.description}}</span>
+    </div>
+    <div class="claim-line">
+      <span>Reference:</span>
+      <el-input class="claim-file" v-model="fileRef" size="mini" type="textarea" />
+    </div>
     <div class="claim-bot">
       <el-button type="primary" size="mini" @click="processTheft(true)">Confirm</el-button>
       <el-button type="danger" size="mini" @click="processTheft(false)">Reject</el-button>
@@ -71,12 +78,28 @@ export default {
   align-items: flex-start;
   justify-content: flex-start;
   text-align: left;
-  p {
-    margin: 10px 0;
+  &-title{
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+    font-weight: bold;
+  }
+  &-line {
+    width: 100%;
+    padding: 0 10px;
+    display: flex;
+    margin: 5px 0;
+    box-sizing: border-box;
+    span{
+      flex: 1;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
+    }
   }
   &-file{
+    flex: 1;
     margin-top: 10px;
-    width: 200px;
   }
   &-bot{
     position: absolute;
