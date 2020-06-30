@@ -77,8 +77,11 @@ export default {
   &-show{
     margin: auto;
     width: 800px;
-    height: 350px;
+    height: 550px;
     background: #6d6875;
+    & >>> .el-carousel__container{
+      height: 500px;
+    }
   }
   &-item{
     display: flex;
@@ -86,7 +89,7 @@ export default {
     align-items: center;
     height: 100%;
     img{
-      width: 300px;
+      width: 500px;
     }
   }
   &-detail{
