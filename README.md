@@ -34,3 +34,7 @@
 ## 关闭
 1. ctrl + c 终止web服务
 2. 在fixtures目录下，执行 make destroy销毁网络
+
+## 功能简介
+在Shop界面，选择喜爱的商品，点击购买
+![boat](/showcase/s1.png)
