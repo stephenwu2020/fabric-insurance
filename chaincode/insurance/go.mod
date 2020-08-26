@@ -1,4 +1,4 @@
-module stephenwu2020/fabric-insurance/chaincode/insurance
+module github.com/stephenwu2020/fabric-insurance/chaincode/insurance
 
 go 1.14
 

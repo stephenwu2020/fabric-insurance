@@ -1,5 +1,7 @@
 fixtures/crypto
 fixtures/artifacts
+fixtures/bin
+fixtures/config
 server/serverapp
 server/serverapp.log
 server/.vscode

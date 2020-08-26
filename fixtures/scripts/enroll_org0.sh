@@ -9,8 +9,8 @@ ORG0_ORDERER_HOME=${ORG0_HOME}/orderers/orderer.org0.example.com
 ORG0_ADMIN_HOME=${ORG0_HOME}/users/Admin@org0.example.com
 
 LOG_LEVEL=error
-ENROLL="fabric-ca-client enroll --loglevel ${LOG_LEVEL}"
-REGISTER="fabric-ca-client register --loglevel ${LOG_LEVEL}"
+ENROLL="./bin/fabric-ca-client enroll --loglevel ${LOG_LEVEL}"
+REGISTER="./bin/fabric-ca-client register --loglevel ${LOG_LEVEL}"
 
 
 #enroll ca admin

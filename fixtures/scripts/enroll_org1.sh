@@ -10,8 +10,8 @@ ORG1_PEER2_HOME=${ORG1_HOME}/peers/peer2.org1.example.com
 ORG1_ADMIN_HOME=${ORG1_HOME}/users/Admin@org1.example.com
 
 LOG_LEVEL=error
-ENROLL="fabric-ca-client enroll --loglevel ${LOG_LEVEL}"
-REGISTER="fabric-ca-client register --loglevel ${LOG_LEVEL}"
+ENROLL="./bin/fabric-ca-client enroll --loglevel ${LOG_LEVEL}"
+REGISTER="./bin/fabric-ca-client register --loglevel ${LOG_LEVEL}"
 
 # enroll ca admin
 export FABRIC_CA_CLIENT_HOME=$ORG1_HOME

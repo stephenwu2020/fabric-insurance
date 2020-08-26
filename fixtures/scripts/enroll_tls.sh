@@ -3,8 +3,8 @@
 CA_HOME=${PWD}/crypto/caservers/tlsca.example.com
 HOME=${CA_HOME}/users/Admin@tlsca.example.com
 LOG_LEVEL=error
-ENROLL="fabric-ca-client enroll --loglevel ${LOG_LEVEL}"
-REGISTER="fabric-ca-client register --loglevel ${LOG_LEVEL}"
+ENROLL="./bin/fabric-ca-client enroll --loglevel ${LOG_LEVEL}"
+REGISTER="./bin/fabric-ca-client register --loglevel ${LOG_LEVEL}"
 
 mkdir -p ${HOME}
 

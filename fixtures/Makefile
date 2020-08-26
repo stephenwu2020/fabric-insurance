@@ -2,12 +2,21 @@ DOCKER_COMPOSE_FILE=${PWD}/docker-compose.yaml
 CRYPTO_HOME=${PWD}/crypto
 ARTIFACTS_HOME=${PWD}/artifacts
 CHAN_NAME="assetschannel"
+FABRIC_VERSION=1.4.2
 
-.PHONY: all
-all:  setup-network setup-channel setup-chaincode
 
-.PHONY: all-stop
-all-stop: down 
+# fetch dependency
+.PHONY: dep
+dep:
+	@echo "fetching dependency"
+	./scripts/bootstrap.sh ${FABRIC_VERSION} ${FABRIC_VERSION} -s
+	@echo "fetching dependency finsihed."
+
+.PHONY: new
+new:  setup-network setup-channel setup-chaincode
+
+.PHONY: destroy
+destroy: down clean
 
 .PHONY: setup-network
 setup-network: gen-dir ca-up  ca-enroll gen-artifacts net-up
@@ -17,7 +26,7 @@ setup-channel: create-chan join-chan update-anchor
 
 .PHONY: setup-chaincode
 setup-chaincode: 
-	@./setup_chaincode.sh
+	@./scripts/setup_chaincode.sh
 
 .PHONY: gen-dir
 gen-dir:
@@ -35,16 +44,16 @@ ca-up:
 .PHONY: ca-enroll
 ca-enroll:
 	@echo "enroll and register..."
-	@./enroll_tls.sh	
-	@./enroll_org0.sh
-	@./enroll_org1.sh
-	@./enroll_org2.sh
+	@./scripts/enroll_tls.sh	
+	@./scripts/enroll_org0.sh
+	@./scripts/enroll_org1.sh
+	@./scripts/enroll_org2.sh
 
 .PHONY: gen-artifacts
 gen-artifacts:
 	@echo "generate artifacts..."
-	@configtxgen -profile OrgsOrdererGenesis -outputBlock ${ARTIFACTS_HOME}/genesis.block -channelID syschannel
-	@configtxgen -profile OrgsChannel -outputCreateChannelTx ${ARTIFACTS_HOME}/channel.tx -channelID ${CHAN_NAME}
+	@./bin/configtxgen -profile OrgsOrdererGenesis -outputBlock ${ARTIFACTS_HOME}/genesis.block -channelID syschannel
+	@./bin/configtxgen -profile OrgsChannel -outputCreateChannelTx ${ARTIFACTS_HOME}/channel.tx -channelID ${CHAN_NAME}
 
 .PHONY: net-up
 net-up:
@@ -98,7 +107,7 @@ join-chan:
 .PHONY: update-anchor
 update-anchor:
 	#org1's anchor peer
-	@configtxgen -profile OrgsChannel -outputAnchorPeersUpdate ${ARTIFACTS_HOME}/org1Anchors.tx -channelID ${CHAN_NAME} -asOrg org1
+	@./bin/configtxgen -profile OrgsChannel -outputAnchorPeersUpdate ${ARTIFACTS_HOME}/org1Anchors.tx -channelID ${CHAN_NAME} -asOrg org1
 	@docker exec \
 		-e CORE_PEER_MSPCONFIGPATH=/tmp/hyperledger/org1/admin/msp \
 		-e CORE_PEER_ADDRESS=peer1.org1.example.com:7051 \
@@ -110,7 +119,7 @@ update-anchor:
 	@sleep 3
 
 	# org2's anchor peer
-	@configtxgen -profile OrgsChannel -outputAnchorPeersUpdate ${ARTIFACTS_HOME}/org2Anchors.tx -channelID ${CHAN_NAME} -asOrg org2
+	@./bin/configtxgen -profile OrgsChannel -outputAnchorPeersUpdate ${ARTIFACTS_HOME}/org2Anchors.tx -channelID ${CHAN_NAME} -asOrg org2
 	@docker exec \
 		-e CORE_PEER_MSPCONFIGPATH=/tmp/hyperledger/org2/admin/msp \
 		-e CORE_PEER_ADDRESS=peer1.org2.example.com:7051 \
@@ -139,4 +148,4 @@ down:
 clean:
 	@echo "clean crypto materials and artifacts..."
 	@rm -rf ${CRYPTO_HOME} ${ARTIFACTS_HOME}
-	@./cleaner.sh
+	@./scripts/cleaner.sh
